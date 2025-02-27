@@ -32,6 +32,22 @@ def predict():
     skills_df = pd.DataFrame(skills_tfidf, columns=vectorizer.get_feature_names_out())
 
     # Make prediction
+    print("*********************************")
+    # Load expected feature names
+    with open("features.pkl", "rb") as f:
+        expected_features = pickle.load(f)
+
+    # Ensure input has the same features
+    for col in expected_features:
+        if col not in skills_df:
+            skills_df[col] = 0  # Add missing columns with default values
+
+    # Ensure correct column order
+    skills_df = skills_df[expected_features]
+
+    # Now, make predictions
+    prediction = model.predict(skills_df)
+    print("*********************************")
     prediction = model.predict(skills_df)[0]
     predicted_career = career_path_encoder.inverse_transform([prediction])[0]
 
