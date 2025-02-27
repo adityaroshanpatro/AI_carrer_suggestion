@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 import pickle
 import pandas as pd
+import os
+
 
 app = Flask(__name__)
 
@@ -54,4 +56,6 @@ def predict():
     return jsonify({"predicted_career_path": predicted_career})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # app.run(debug=True)
+    PORT = os.getenv("PORT", 10000)  # Default to 10000 if PORT is not set
+    app.run(host="0.0.0.0", port=int(PORT), debug=True)
